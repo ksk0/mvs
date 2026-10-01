@@ -35,27 +35,6 @@ function! s:EnsureVimPlug() abort
 	endif
 endfunction
 
-
-function! s:SourceDirectory(dir) abort
-	" Source each rc file in given directory
-	"
-    if !isdirectory(a:dir)
-        return
-    endif
-
-    let l:files = globpath(a:dir, '*.vim', 0, 1)
-
-    call sort(l:files)
-
-    for l:file in l:files
-        if filereadable(l:file)
-            execute 'source ' . fnameescape(l:file)
-        endif
-    endfor
-
-endfunction
-
-
 function! s:RegisterPluginUpdate() abort
 	" Prepare autocomand group which would run
 	" PlugInstall on Vim entry if needed.
@@ -63,14 +42,21 @@ function! s:RegisterPluginUpdate() abort
 	augroup mvs_setup
 	    autocmd!
 	    autocmd VimEnter * call mvs#plugins#update()
+	    autocmd VimEnter * call mvs#config#load()
 	augroup END
+endfunction
+
+function! s:LoadUserConfig() abort
+	if v:vim_did_enter
+		return
+	endif
+
+	call mvs#config#load()
 endfunction
 
 
 call s:EnsureVimPlug()
 call s:RegisterPluginUpdate()
-
-call s:SourceDirectory(expand('~/.vim/vimrc.d'))
-call s:SourceDirectory(expand('~/.vim/vimrc.local.d'))
+call s:LoadUserConfig()
 
 let g:mvs_is_setup = 1

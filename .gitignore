@@ -4,7 +4,7 @@
 
 # Ignore user vimrc files
 #
-/vimrc.local.d/
+/vimrc.d/
 /autoload/plug.vim
 /plugged/
 /.netrwhist
