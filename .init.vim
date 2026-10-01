@@ -35,7 +35,13 @@ function! s:EnsureVimPlug() abort
 	endif
 endfunction
 
-function! s:RegisterPluginUpdate() abort
+function! s:LoadPlugins() abort
+	call plug#begin('~/.vim/plugged')
+    execute 'source ' . fnameescape(expand('~/.vim/plugins'))
+	call plug#end()
+endfunction
+
+function! s:RegisterAutoSetup() abort
 	" Prepare autocomand group which would run
 	" PlugInstall on Vim entry if needed.
 	"
@@ -56,7 +62,8 @@ endfunction
 
 
 call s:EnsureVimPlug()
-call s:RegisterPluginUpdate()
+call s:LoadPlugins()
 call s:LoadUserConfig()
+call s:RegisterAutoSetup()
 
 let g:mvs_is_setup = 1
