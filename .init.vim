@@ -15,7 +15,7 @@ function! s:install_vim_plug() abort
 	if filereadable(s:plugvim)
 		return
 	endif
-	
+
 	if !isdirectory(s:autoload)
 	    call mkdir(s:autoload, 'p')
 	endif
@@ -51,6 +51,11 @@ function! s:source_directory(dir) abort
     endfor
 
 endfunction
+
+"
+" Install vim-plug
+"
+call s:install_vim_plug()
 
 
 "
