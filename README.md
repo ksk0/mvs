@@ -3,4 +3,4 @@ My Vim Setup
 
 ### To install run:
 ```sh
-wget -qO- https://raw.githubusercontent.com/YOUR_GITHUB_USER/mvs/main/.install.sh | bash
+wget -qO- https://raw.githubusercontent.com/ksk0/mvs/main/.install.sh | bash
