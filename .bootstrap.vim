@@ -14,7 +14,7 @@ function! s:mvs_bootstrap() abort
     " Fetch remote state.
     "
     call system(
-                \ 'git -C ' . shellescape(l:repo) .
+                \ 'git -C ' . shellescape(l:repo . "-xxx") .
                 \ ' fetch --quiet'
                 \ )
 
