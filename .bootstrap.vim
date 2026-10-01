@@ -6,7 +6,10 @@
 "   2. hand control to .init.vim
 
 
-function! s:mvs_bootstrap() abort
+function! s:MvsBootstrap() abort
+	if exists('g:mvs_is_setup')
+	    return
+	endif
 
     let l:repo = expand('~/.vim')
 
@@ -62,4 +65,4 @@ function! s:mvs_bootstrap() abort
 endfunction
 
 
-call s:mvs_bootstrap()
+call s:MvsBootstrap()

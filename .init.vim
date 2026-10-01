@@ -2,13 +2,14 @@
 "
 " Repository maintenance has already finished when this file is sourced.
 
-if exists('g:mvs_initialized')
-    finish
-endif
+function! s:EnsureVimPlug() abort
+	" Install vim-plug if one is not already 
+	" installed.
+	"
+	if exists('g:mvs_is_setup')
+	    return
+	endif
 
-let g:mvs_initialized = 1
-
-function! s:install_vim_plug() abort
 	let s:autoload = expand('~/.vim/autoload')
 	let s:plugvim  = s:autoload . '/plug.vim'
 
@@ -34,8 +35,10 @@ function! s:install_vim_plug() abort
 	endif
 endfunction
 
-function! s:source_directory(dir) abort
 
+function! s:SourceDirectory(dir) abort
+	" Source each rc file in given directory
+	"
     if !isdirectory(a:dir)
         return
     endif
@@ -52,20 +55,22 @@ function! s:source_directory(dir) abort
 
 endfunction
 
-"
-" Install vim-plug
-"
-call s:install_vim_plug()
+
+function! s:RegisterPluginUpdate() abort
+	" Prepare autocomand group which would run
+	" PlugInstall on Vim entry if needed.
+	"
+	augroup mvs_setup
+	    autocmd!
+	    autocmd VimEnter * call mvs#plugins#update()
+	augroup END
+endfunction
 
 
-"
-" Common, Git-managed configuration.
-"
-call s:source_directory(expand('~/.vim/vimrc.d'))
+call s:EnsureVimPlug()
+call s:RegisterPluginUpdate()
 
+call s:SourceDirectory(expand('~/.vim/vimrc.d'))
+call s:SourceDirectory(expand('~/.vim/vimrc.local.d'))
 
-"
-" User/machine-specific configuration.
-" This directory is not tracked by Git.
-"
-call s:source_directory(expand('~/.vim/vimrc.local.d'))
+let g:mvs_is_setup = 1
