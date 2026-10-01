@@ -1,0 +1,7 @@
+# ignore vim swap files
+#
+*.sw?
+
+# Ignore user vimrc files
+#
+/vimrc.local.d/
