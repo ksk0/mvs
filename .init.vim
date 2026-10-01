@@ -8,6 +8,31 @@ endif
 
 let g:mvs_initialized = 1
 
+function! s:install_vim_plug() abort
+	let s:autoload = expand('~/.vim/autoload')
+	let s:plugvim  = s:autoload . '/plug.vim'
+
+	if filereadable(s:plugvim)
+		return
+	endif
+	
+	if !isdirectory(s:autoload)
+	    call mkdir(s:autoload, 'p')
+	endif
+	
+	if !filereadable(s:plugvim)
+	    call system(
+	                \ 'wget -qO ' . shellescape(s:plugvim) . ' ' .
+	                \ shellescape('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+	                \ )
+	
+	    if v:shell_error
+	        echohl ErrorMsg
+	        echom 'mvs: failed to download vim-plug'
+	        echohl None
+	    endif
+	endif
+endfunction
 
 function! s:source_directory(dir) abort
 
