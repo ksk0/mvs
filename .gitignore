@@ -4,7 +4,9 @@
 
 # Ignore user vimrc files
 #
+/plugins
 /vimrc.d/
 /autoload/plug.vim
 /plugged/
+/.state/
 /.netrwhist

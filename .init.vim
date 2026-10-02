@@ -2,67 +2,73 @@
 "
 " Repository maintenance has already finished when this file is sourced.
 
-function! s:EnsureVimPlug() abort
-	" Install vim-plug if one is not already 
-	" installed.
-	"
-	if exists('g:mvs_is_setup')
-	    return
-	endif
+function! s:LoadVimPlug() abort
+    " Install vim-plug if one is not already
+    " installed.
+    "
+    if exists('g:mvs_is_setup')
+        return
+    endif
 
-	let s:autoload = expand('~/.vim/autoload')
-	let s:plugvim  = s:autoload . '/plug.vim'
+    let s:autoload = expand('~/.vim/autoload')
+    let s:plugvim  = s:autoload . '/plug.vim'
 
-	if filereadable(s:plugvim)
-		return
-	endif
+    if filereadable(s:plugvim) && !mvs#update#due('vimplug')
+        return
+    endif
 
-	if !isdirectory(s:autoload)
-	    call mkdir(s:autoload, 'p')
-	endif
-	
-	if !filereadable(s:plugvim)
-	    call system(
-	                \ 'wget -qO ' . shellescape(s:plugvim) . ' ' .
-	                \ shellescape('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-	                \ )
-	
-	    if v:shell_error
-	        echohl ErrorMsg
-	        echom 'mvs: failed to download vim-plug'
-	        echohl None
-	    endif
-	endif
+    if !isdirectory(s:autoload)
+        call mkdir(s:autoload, 'p')
+    endif
+
+    call system(
+                \ 'wget -qO ' . shellescape(s:plugvim) . ' ' .
+                \ shellescape('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+                \ )
+
+    if v:shell_error
+        echohl ErrorMsg
+        echom 'mvs: failed to download vim-plug'
+        echohl None
+    else
+        call mvs#update#mark('vimplug')
+    endif
 endfunction
 
-function! s:LoadPlugins() abort
-	call plug#begin('~/.vim/plugged')
-    execute 'source ' . fnameescape(expand('~/.vim/plugins'))
-	call plug#end()
+function! s:LoadPlugins(plugs) abort
+    let l:plist = expand('~/.vim/' . a:plugs)
+
+    if filereadable(l:plist)
+        return
+    endif
+
+    call plug#begin('~/.vim/plugged')
+    execute 'source ' . fnameescape(l:plist)
+    call plug#end()
 endfunction
 
 function! s:RegisterAutoSetup() abort
-	" Prepare autocomand group which would run
-	" PlugInstall on Vim entry if needed.
-	"
-	augroup mvs_setup
-	    autocmd!
-	    autocmd VimEnter * call mvs#plugins#update()
-	    autocmd VimEnter * call mvs#config#load()
-	augroup END
+    " Prepare autocomand group which would run
+    " PlugInstall on Vim entry if needed.
+    "
+    augroup mvs_setup
+        autocmd!
+        autocmd VimEnter * call mvs#plugins#update()
+        autocmd VimEnter * call mvs#config#load()
+    augroup END
 endfunction
 
 function! s:LoadUserConfig() abort
-	if v:vim_did_enter
-		return
-	endif
+    if v:vim_did_enter
+        return
+    endif
 
-	call mvs#config#load()
+    call mvs#config#load()
 endfunction
 
-
-call s:EnsureVimPlug()
-call s:LoadPlugins()
+call s:LoadVimPlug()
+call s:LoadPlugins('.plugins')
+call s:LoadPlugins('plugins')
 call s:LoadUserConfig()
 call s:RegisterAutoSetup()
 
