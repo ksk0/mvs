@@ -38,7 +38,7 @@ endfunction
 function! s:LoadPlugins(plugs) abort
     let l:plist = expand('~/.vim/' . a:plugs)
 
-    if filereadable(l:plist)
+    if !filereadable(l:plist)
         return
     endif
 
