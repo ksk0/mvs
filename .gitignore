@@ -1,12 +1,20 @@
-# ignore vim swap files
-#
-*.sw?
+# Ignore everything by default
+/*
 
-# Ignore user vimrc files
-#
-/plugins
-/vimrc.d/
-/autoload/plug.vim
-/plugged/
-/.state/
-/.netrwhist
+# Keep repository metadata/files
+!/.gitignore
+!/README.md
+!/DESIGN.md
+
+# Keep MVS-owned files
+!/.bootstrap.vim
+!/.init.vim
+!/.plugins
+!/vimrc
+
+# Keep MVS runtime tree
+!/.mvs/
+!/.mvs/**
+
+# Ignore Vim swap files even inside whitelisted directories
+*.sw?
