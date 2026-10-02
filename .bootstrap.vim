@@ -2,11 +2,26 @@
 "
 " Keep this file small and stable.
 " Its jobs are:
-"   1. update the mvs repository
-"   2. hand control to .init.vim
+"
+"   1. recreate ~/.vimrc link
+"   2. update the mvs repository
+"   3. hand control to .init.vim
 
 let s:repo = expand('~/.vim')
 
+
+function! s:RecreateVimrcLink() abort
+    let s:vimrc_link = expand('~/.vimrc')
+    let s:vimrc_target = expand('~/.vim/vimrc')
+
+    if getftype(s:vimrc_link) ==# ''
+        call system(
+                    \ 'ln -s ' .
+                    \shellescape(s:vimrc_target) . ' ' .
+                    \shellescape(s:vimrc_link)
+                    \ )
+    endif
+endfunction
 
 function! s:MvsUpdateRepo() abort
     " this is reload of rc scirpts
@@ -89,5 +104,6 @@ function! s:MvsRunInit() abort
 endfunction
 
 
+call s:RecreateVimrcLink()
 call s:MvsUpdateRepo()
 call s:MvsRunInit()
