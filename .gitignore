@@ -16,5 +16,8 @@
 !/.mvs/
 !/.mvs/**
 
+# But ignore vim-plug file
+/.mvs/autoload/plug.vim
+
 # Ignore Vim swap files even inside whitelisted directories
 *.sw?

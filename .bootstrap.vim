@@ -8,7 +8,18 @@
 "   3. hand control to .init.vim
 
 let s:repo = expand('~/.vim')
+let s:plugin_path = expand('~/.vim/.mvs')
 
+
+function! s:SetMvsPluginPath() abort
+    if exists('g:mvs_plugin_path')
+        return
+    endif
+
+    execute 'set runtimepath^=' . fnameescape(s:plugin_path)
+
+    let g:mvs_plugin_path = s:plugin_path
+endfunction
 
 function! s:RecreateVimrcLink() abort
     let s:vimrc_link = expand('~/.vimrc')
@@ -104,6 +115,7 @@ function! s:MvsRunInit() abort
 endfunction
 
 
+call s:SetMvsPluginPath()
 call s:RecreateVimrcLink()
 call s:MvsUpdateRepo()
 call s:MvsRunInit()

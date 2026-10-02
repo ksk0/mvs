@@ -10,7 +10,7 @@ function! s:LoadVimPlug() abort
         return
     endif
 
-    let s:autoload = expand('~/.vim/autoload')
+    let s:autoload = g:mvs_plugin_path . '/autoload'
     let s:plugvim  = s:autoload . '/plug.vim'
 
     if filereadable(s:plugvim) && !mvs#update#due('vimplug')
